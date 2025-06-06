@@ -17,7 +17,7 @@ function pad(str: string, length: number) {
 let valueFromPreviousInvocation = '';
 let lastSelected: Item = undefined;
 
-function showFuzzySearch(useCurrentSelection: boolean) {
+function showFuzzySearch(useCurrentSelection: boolean, predefinedSearch?: string) {
   // Build the entries we will show the user. One entry for each non-empty line,
   // prefixed with the line number. We prefix with the line number so lines stay
   // in the correct order and so duplicate lines do not get merged together.
@@ -64,7 +64,9 @@ function showFuzzySearch(useCurrentSelection: boolean) {
   });
 
 
-  if (useCurrentSelection) {
+  if (predefinedSearch) {
+    pick.value = predefinedSearch;
+  } else if (useCurrentSelection) {
     pick.value = vscode.window.activeTextEditor.document.getText(
       vscode.window.activeTextEditor.selection);
   } else {
@@ -113,4 +115,21 @@ export function activate(context: vscode.ExtensionContext) {
     'fuzzySearch.activeTextEditor', () => showFuzzySearch(false)));
   context.subscriptions.push(vscode.commands.registerCommand(
     'fuzzySearch.activeTextEditorWithCurrentSelection', () => showFuzzySearch(true)));
+  context.subscriptions.push(vscode.commands.registerCommand(
+    'fuzzySearch.withPredefinedSearch', async () => {
+      const searchText = await vscode.window.showInputBox({
+        placeHolder: 'Enter search text',
+        prompt: 'Enter text to search for in the current document'
+      });
+      
+      if (searchText) {
+        showFuzzySearch(false, searchText);
+      }
+    }));
+  context.subscriptions.push(vscode.commands.registerCommand(
+    'fuzzySearch.withPredefinedSearchArg', (searchText: string) => {
+      if (searchText) {
+        showFuzzySearch(false, searchText);
+      }
+    }));
 }
