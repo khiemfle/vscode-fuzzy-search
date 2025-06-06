@@ -5,3 +5,5 @@ document.
 
 Bind `fuzzySearch.activeTextEditor` to a keyboard shortcut to use the search
 quickly.
+
+Support `fuzzySearch.withPredefinedSearchArg` to pass a predefined search which can be combined with the `macro-commander` extension.

@@ -116,17 +116,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand(
     'fuzzySearch.activeTextEditorWithCurrentSelection', () => showFuzzySearch(true)));
   context.subscriptions.push(vscode.commands.registerCommand(
-    'fuzzySearch.withPredefinedSearch', async () => {
-      const searchText = await vscode.window.showInputBox({
-        placeHolder: 'Enter search text',
-        prompt: 'Enter text to search for in the current document'
-      });
-      
-      if (searchText) {
-        showFuzzySearch(false, searchText);
-      }
-    }));
-  context.subscriptions.push(vscode.commands.registerCommand(
     'fuzzySearch.withPredefinedSearchArg', (searchText: string) => {
       if (searchText) {
         showFuzzySearch(false, searchText);
